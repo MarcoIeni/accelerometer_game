@@ -1,8 +1,4 @@
-# Personal exclusion
-*.el
-GTAGS
-GPATH
-GRTAGS
+### C/C++ files ###
 
 # Prerequisites
 *.d
@@ -57,3 +53,19 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+### Gtags files ###
+GTAGS
+GPATH
+GRTAGS
+
+### Emacs files ###
+# projectiles files
+.projectile
+
+# directory configuration
+.dir-locals.el
+
+# backup files
+*~
+\#*\#
