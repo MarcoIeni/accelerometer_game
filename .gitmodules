@@ -1,0 +1,3 @@
+[submodule "miosix-kernel"]
+	path = miosix-kernel
+	url = git@github.com:fedetft/miosix-kernel.git
