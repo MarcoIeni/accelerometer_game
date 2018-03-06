@@ -59,6 +59,9 @@ GTAGS
 GPATH
 GRTAGS
 
+### CLang complete files
+.clang_complete
+
 ### Emacs files ###
 # projectiles files
 .projectile
