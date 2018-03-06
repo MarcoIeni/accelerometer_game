@@ -1,3 +1,9 @@
+# Personal exclusion
+*.el
+GTAGS
+GPATH
+GRTAGS
+
 # Prerequisites
 *.d
 
@@ -6,6 +12,7 @@
 *.ko
 *.obj
 *.elf
+*.bin
 
 # Linker output
 *.ilk
