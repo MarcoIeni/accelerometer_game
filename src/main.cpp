@@ -11,6 +11,8 @@ typedef Gpio<GPIOD_BASE,14> led3; //red
 typedef Gpio<GPIOD_BASE,15> led2; //blue
 
 int chooseNumPlayers() {
+  int numPlayers = 2;
+
   led1::high();
   led2::high();
   configureButtonInterrupt();
@@ -34,8 +36,6 @@ int chooseNumPlayers() {
 
 int main()
 {
-  int numPlayers = 2;
-
   led1::mode(Mode::OUTPUT);
   led2::mode(Mode::OUTPUT);
   led3::mode(Mode::OUTPUT);
