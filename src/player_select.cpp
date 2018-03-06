@@ -31,7 +31,7 @@ int chooseNumPlayers() {
         led4::low();
       }
     }
-  return 0; // TODO
+  return numPlayers; // TODO
 }
 
 int player_select()
