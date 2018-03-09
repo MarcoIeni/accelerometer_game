@@ -1,0 +1,98 @@
+% Students template. Simone Libutti, Politecnico di milano, 2016
+% simone.libutti@polimi.it
+
+\documentclass[12pt, english]{scrartcl}
+\usepackage[a4paper,bindingoffset=0.2in,left=.5in,right=.5in,top=1in,bottom=1in,footskip=.5in]{geometry}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{lipsum}
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[T1]{fontenc}
+\graphicspath{{./figures/raster/}{./figures/vector/}}
+
+\usepackage{tabularx}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{P}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{mathtools}
+\usepackage{numprint}
+\usepackage{amsmath}
+\usepackage[linesnumbered]{algorithm2e}
+\usepackage{multirow}
+\usepackage{multicol}
+
+\usepackage{prettyref}
+\newrefformat{fig}{Figure~\ref{#1}}
+\newrefformat{tab}{Table~\ref{#1}}
+\newrefformat{sec}{Section~\ref{#1}}
+\newrefformat{ssec}{Paragraph~\ref{#1}}
+\newrefformat{eq}{Equation~\ref{#1}}
+\newrefformat{alg}{Algorithm~\ref{#1}}
+
+\makeatletter
+\newcommand{\redub}{}
+\def\redub#1{%
+  \@ifnextchar_%
+    {\@redub{#1}}
+    {\@latex@warning{Missing argument for \string\redub}\@redub{#1}_{}}%
+}
+\def\@redub#1_#2{%
+    \colorlet{currentcolor}{.}%
+    \color{black}%
+    \underbrace{\color{currentcolor}#1}_{\color{black}#2}%
+    \color{currentcolor}%
+}
+\makeatother
+
+%----------------------------------------------------------------------------------------
+%	Put your info here
+%----------------------------------------------------------------------------------------
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+\title{\normalfont \normalsize 
+\textsc{Politecnico di Milano - Department of Electronics, Information and Bioengineering} \\[1cm]
+\includegraphics[scale=1.2]{polimi} \\[1cm]
+\horrule{0.5pt} \\[0.4cm]
+\huge \textbf{Accelerometer Game} \\[.5cm] % The assignment title
+\large [ Coding Project ] \\ % Pick one: Monography and Coding Project
+\horrule{2pt} \\[0.5cm]
+\vfill
+\author{}
+\begin{tabular}{r l}
+\textbf{Student} & Marco Ieni \\
+\textbf{ID} & 863752 \\[0.5cm]
+\textbf{Student} & Simone Perriello \\
+\textbf{ID} & 864562 \\[0.5cm]
+\textbf{Course} & Advanced Operating Systems \\
+\textbf{Academic Year} & 2017-2018 \\[0.5cm]
+\textbf{Advisor} & Federico Terraneo \\ %e.g. Simone Libutti, Giuseppe Massari
+\textbf{Professor} & William Fornaciari \\
+\end{tabular}
+\date{\normalsize\today}
+}
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Print the title
+
+\pagebreak\tableofcontents\pagebreak
+
+% UNCOMMENT only if monography
+%\input{text/monography}
+
+% UNCOMMENT only if coding project
+\input{text/coding}
+
+\pagebreak
+\bibliographystyle{unsrt}
+\bibliography{text/project_bibliography}
+
+\end{document}

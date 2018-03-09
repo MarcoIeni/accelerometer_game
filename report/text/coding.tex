@@ -1,0 +1,86 @@
+\section{Introduction}
+\textbf{Hello, I'm a citation! \cite{mathes1976designing}.}
+\lipsum[2]
+\subsection{Problem statement}
+\textbf{Hello, I'm another citation! \cite{miller1979humanistic}}.
+\lipsum[1-2]
+\subsection{Summary of the work}
+\lipsum[2]
+
+\pagebreak
+
+\section{Design and implementation}
+\textbf{Please make sure you explicitely cite the figures.
+\prettyref{fig:polimi_logo} shows the logo of Politecnico di Milano.
+Please also make sure you provide each figure with an exhaustive caption.}
+
+\lipsum[1-12]
+
+\begin{figure}
+\centering\includegraphics[width=5cm]{polimi}
+\caption{POLIMI logo, which is used by this document as a placeholder.}
+\label{fig:polimi_logo}
+\end{figure}
+
+\section{Experimental evaluation}
+\lipsum[1]
+\subsection{Experimental setup}
+\lipsum[1-2]
+\subsection{Results}
+\textbf{Please make sure you explicitely cite the tables.
+\prettyref{tab:a_complex_table} shows a complex table.
+Please also make sure you provide each table with an exhaustive caption.
+Captions for tables must be placed before not after the tables.}
+\lipsum[1-4]
+
+
+\begin{table}
+\small
+\begin{center}
+
+\caption{Summary of the test scenarios.
+$M_1\xrightarrow{\alpha}M_2$ means that an application mapping
+is changed from $M_1$ to $M_2$ after application $\alpha$
+has terminated.}
+\begin{tabular}{l|lcc|L{2cm}l}
+\cline{2-6}
+& \multicolumn{3}{c|}{Description of the workload} & \multicolumn{2}{c}{Cores allocation}\\
+\cline{2-6}
+Name of scenario & Application & Threads & $\frac{Threads}{Cores}$ & HMP & HMP w/policy \\
+\hline
+
+\multirow{2}{*}{LITTLE 1} & ferret$\dagger$ & 1 & \multirow{2}{*}{1.00} & $0-3$ & $0$ \\
+ & vips & 3 & & $0-3$ & $1-3 \xrightarrow{\dagger} 0-3$ \\
+\hline
+\multirow{2}{*}{LITTLE 2} & freqmine$\dagger$ & 2 & \multirow{2}{*}{1.25} & $0-3$ & $0-1$ \\
+ & blackscholes & 3 &   & $0-3$ & $0-3 \xrightarrow{\dagger} 0-3$ \\
+\hline
+\multirow{2}{*}{LITTLE 3} & bodytrack$\dagger$ & 3 & \multirow{2}{*}{1.25} & $0-3$ & $0-1$ \\
+ & facesim & 2 &  & $0-3$ & $0-3$ \\
+\hline
+\multirow{2}{*}{LITTLE 4} & facesim & 3 & \multirow{2}{*}{1.50} & $0-3$ & $0-1\xrightarrow{\dagger}0-3$ \\
+ & blackscholes$\dagger$ & 3 &  & $0-3$ & $2-3$ \\
+\hline
+\hline
+
+
+\multirow{2}{*}{big 1} & vips & 3 & \multirow{2}{*}{1.00} & $4-7$ & $4-5 \xrightarrow{\dagger} 4-7$ \\
+ & ferret$\dagger$ & 1 & & $4-7$ & $6-7$ \\
+\hline
+\multirow{2}{*}{big 2} & freqmine$\dagger$ & 2 & \multirow{2}{*}{1.25} & $4-7$ & $4-5$ \\
+ & blackscholes & 3 &   & $4-7$ & $6-7 \xrightarrow{\dagger} 4-7$ \\
+\hline
+\multirow{2}{*}{big 3} & facesim & 2 & \multirow{2}{*}{1.25} & $4-7$ & $4-5$ \\
+ & bodytrack & 3 &  & $4-7$ & $4-7$ \\
+\hline
+\multirow{2}{*}{big 4} & facesim & 3 & \multirow{2}{*}{1.50} & $4-7$ & $4-5\xrightarrow{\dagger}4-7$ \\
+ & blackscholes$\dagger$ & 3 &  & $4-7$ & $4-7$ \\
+\hline
+
+\end{tabular}
+  \label{tab:a_complex_table}
+\end{center}
+\end{table}
+
+\section{Conclusions and Future Works}
+\lipsum[1]
