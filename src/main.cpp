@@ -27,6 +27,12 @@ int player_select() { return 0; }
 void play(int players) {
   // Simple first trial
 
+  led1::mode(Mode::OUTPUT);
+  led2::mode(Mode::OUTPUT);
+  led3::mode(Mode::OUTPUT);
+  led4::mode(Mode::OUTPUT);
+
+
   int numClicks = 1;
   led1::high();
 
@@ -47,7 +53,6 @@ void play(int players) {
       led3::low();
       led4::low();
     }
-
-    return;
   }
+  return;
 }
