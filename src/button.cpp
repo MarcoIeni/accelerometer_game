@@ -1,7 +1,7 @@
 
-#include "button.h"
 #include <miosix.h>
 #include <kernel/scheduler/scheduler.h>
+#include "button.h"
 
 using namespace miosix;
 
