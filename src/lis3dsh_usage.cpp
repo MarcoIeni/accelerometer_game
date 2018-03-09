@@ -5,51 +5,47 @@
 
 using namespace miosix;
 
-/*!< Detailed description after the member */
-typedef Gpio<GPIOE_BASE, 3> spi_ce; // PE3 enables SPI
+/*!< SPI clock enable on PE.3*/
+typedef Gpio<GPIOE_BASE, 3> spi_ce;
+/*!< SPI clock on PA.5*/
 typedef Gpio<GPIOA_BASE, 5> spi_sck;
+/*!< SPI input on PA.7*/
 typedef Gpio<GPIOA_BASE, 7> spi_si;
+/*!< SPI output on PA.6*/
 typedef Gpio<GPIOA_BASE, 6> spi_so;
-
-// //typedef Gpio<GPIOE_BASE, 0> spi_int1; // INT1 is connected to PE0
-typedef Gpio<GPIOE_BASE, 1> spi_int2; // INT2 is connected to PE1
-
-// const unsigned int NUM_NOPS 10;
+/*!< SoftwareSPI miosix class*/
 typedef SoftwareSPI<spi_si, spi_so, spi_sck, spi_ce, 10> spi_c;
 
-/*
- */
 /**
  *  \brief Writes 1 byte to the accelerometer through SPI
  *
- *  Detailed description
- *
  *  \param data the data to be written
- *  \param writeAddrr the address to write to
+ *  \param writeAddrr the address to write into
  *  \return void
- */ void
-LIS3DSH_write(unsigned char data, unsigned char writeAddr) {
+ */
+void LIS3DSH_write(unsigned char data, unsigned char writeAddr) {
   spi_c::sendRecvChar(writeAddr);
   spi_c::sendRecvChar(data);
 }
 
 /**
- *  \brief function description
+ *  \brief Initialize LIS3DSH
  *
- *  Detailed description
+ *  First initialize accelerometer SPI.
+ *  Then write to MEMS CTRL_REG4 and MEMS CTRL_REG5 registers
  *
- *  \param param
- *  \return return type
+ *  \return return void
  */
 void LIS3DSH_init() {
   // Initialize accelerometer SPI
   spi_c::init();
 
-  /* Write value to MEMS CTRL_REG4 register
+  /*
     Output data rate = 0b0110= 100Hz
     Block data update: continuous update
     Enable zen, yen, xen (z, y, x axes)
-  */
+    unction description
+   */
   LIS3DSH_write(0b01100111, LIS3DSH_CTRL_REG4_ADDR);
 
   /* Write value to MEMS CTRL_REG5 register
@@ -58,22 +54,28 @@ void LIS3DSH_init() {
     Self-test disabled
     +- 2g
   */
-
   LIS3DSH_write(0b0, LIS3DSH_CTRL_REG5_ADDR);
 }
-
+/**
+ *  \brief Configure interrupt
+ *
+ *  \return void
+ */
 void LIS3DSH_interrupt_config() {
   /*
     Configure accelerometer INT2
   */
-  spi_c::init();
+  //spi_int2::init();
 
-  EXTI->IMR |= EXTI_IMR_MR1;
+  EXTI->IMR |= EXTI_IMR_MR1; //
+  // listen to raising edge trigger
   EXTI->RTSR |= EXTI_RTSR_TR1;
+  // configure the interrupt controller in order to pass the interrupt request
+  // up to the CPU
   NVIC_EnableIRQ(EXTI1_IRQn);
-  NVIC_SetPriority(EXTI1_IRQn, 15); // set low priority to interrupt.
-  /* Write value to MEMS CTRL_REG3 register */
-  /*
+  // Set the interrupt priority to 15 (low)
+  NVIC_SetPriority(EXTI1_IRQn, 15);
+  /* Write value to MEMS CTRL_REG3 register
      Interrupt signal active high
      Interrupt signal latched
      Interrupt1 enabled
@@ -82,12 +84,19 @@ void LIS3DSH_interrupt_config() {
   LIS3DSH_write(0b01001000, LIS3DSH_CTRL_REG3_ADDR);
 
   /* Configure State Machine 1 */
-
-  /* Write value to MEMS CTRL_REG1 register */
-  // SM1 Enable; SM1 interrupt routed (by default) to INT1; hysteris 0
+  /* Write value to MEMS CTRL_REG1 register
+     SM1 Enable; SM1 interrupt routed (by default) to INT1; hysteris 0
+  */
   LIS3DSH_write(0b1001, LIS3DSH_CTRL_REG1_ADDR);
 }
-
+/**
+ *  \brief Configure click interrupt
+ *
+ *  Configure the states of the State Machine 1 (SM1) of the LIS3DSH in order to
+ *  recognize single click events.
+ *
+ *  \return void
+ */
 void LIS3DSH_click_int_config() {
   LIS3DSH_interrupt_config();
 
@@ -122,6 +131,9 @@ void LIS3DSH_click_int_config() {
      GNTH1
    */
   LIS3DSH_write(0x38, LIS3DSH_ST1_4_ADDR);
+  /*
+    The following was used for double-click
+   */
   // /* 0b 0000 0100
   //    NOP - TI4
   //  */

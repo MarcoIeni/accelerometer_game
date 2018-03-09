@@ -1,5 +1,12 @@
+/**
+ *   \file lis3dsh_addresses.h
+ *   \brief List of LIS3DSH useful addresses.
+ *
+ */
+
 #ifndef _LIS3DSH_ADDRESSES
 #define _LIS3DSH_ADDRESSES
+
 #define LIS3DSH_CTRL_REG4_ADDR 0x20
 #define LIS3DSH_CTRL_REG1_ADDR 0x21
 #define LIS3DSH_CTRL_REG2_ADDR 0x22
@@ -35,6 +42,3 @@
 #define LIS3DSH_SETT2_ADDR 0x7B
 
 #endif
-
-
-
