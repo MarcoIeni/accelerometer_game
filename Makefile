@@ -17,7 +17,7 @@ SUBDIRS := $(KPATH)
 ## List here your source files (both .s, .c and .cpp)
 ##
 SRC :=                                  \
-src/main.cpp
+src/main.cpp src/button.cpp
 
 ##
 ## List here additional static libraries with relative path
