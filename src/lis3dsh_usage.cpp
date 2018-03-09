@@ -28,7 +28,7 @@ typedef SoftwareSPI<spi_si, spi_so, spi_sck, spi_ce, 10> spi_c;
  *  \param writeAddrr the address to write to
  *  \return void
  */ void
-LIS3DSH_write(unsigned char data, unsigned char writeAddrr) {
+LIS3DSH_write(unsigned char data, unsigned char writeAddr) {
   spi_c::sendRecvChar(writeAddr);
   spi_c::sendRecvChar(data);
 }
