@@ -18,9 +18,17 @@ typedef Gpio<GPIOE_BASE, 1> spi_int2; // INT2 is connected to PE1
 typedef SoftwareSPI<spi_si, spi_so, spi_sck, spi_ce, 10> spi_c;
 
 /*
-  Writes 1 byte to the accelerometer through SPI
-*/
-void LIS3DSH_write(unsigned char data, unsigned char writeAddrr) {
+ */
+/**
+ *  \brief Writes 1 byte to the accelerometer through SPI
+ *
+ *  Detailed description
+ *
+ *  \param data the data to be written
+ *  \param writeAddrr the address to write to
+ *  \return void
+ */ void
+LIS3DSH_write(unsigned char data, unsigned char writeAddrr) {
   spi_c::sendRecvChar(writeAddr);
   spi_c::sendRecvChar(data);
 }

@@ -73,3 +73,6 @@ GRTAGS
 *~
 \#*\#
 .#*
+
+### DOXYGEN
+docs/
