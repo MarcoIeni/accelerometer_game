@@ -3,7 +3,7 @@
 #include "timer_logic.h"
 #include "lis3dsh_sync.h"
 #include "lis3dsh_usage.h"
-#include "button.h"
+#include "button_sync.h"
 #include <miosix.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -20,9 +20,9 @@ int main() {
   spi_init();
   LIS3DSH_init();
   LIS3DSH_interrupt_config();
-  LIS3DSH_click_int_config();
+  LIS3DSH_click_sm_config();
 
-  configureButtonInterrupt();
+  button_interrupt_config();
 
   int players = player_select();
   play(players);

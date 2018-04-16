@@ -19,8 +19,8 @@
 #define LIS3DSH_SM_INT2 ((unsigned char)0x08)
 
 void LIS3DSH_init();
-void LIS3DSH_click_int_config();
 void LIS3DSH_interrupt_config();
+void LIS3DSH_click_sm_config();
 
 
 void spi_init();

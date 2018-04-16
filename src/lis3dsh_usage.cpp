@@ -1,9 +1,7 @@
 #include "lis3dsh_usage.h"
 #include "lis3dsh_addresses.h"
 #include <miosix.h>
-// #include "registers.h"
 #include <stdio.h>
-#include <util/software_spi.h>
 
 using namespace miosix;
 
@@ -153,7 +151,7 @@ void LIS3DSH_interrupt_config() {
  *
  *  \return void
  */
-void LIS3DSH_click_int_config() {
+void LIS3DSH_click_sm_config() {
 
   /* Set LIS3DSH State Machines configuration */
   // configure general timer TC1 for SM1

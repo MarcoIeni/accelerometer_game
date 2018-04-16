@@ -1,6 +1,5 @@
 #include "timer_logic.h"
 #include "lis3dsh_sync.h"
-#include "button.h"
 #include <cstdio>
 #include <miosix.h>
 

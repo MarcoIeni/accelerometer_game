@@ -1,11 +1,9 @@
-
 #include <miosix.h>
 #include <kernel/scheduler/scheduler.h>
-#include "button.h"
+#include "button_sync.h"
 
 using namespace miosix;
 
-typedef Gpio<GPIOA_BASE,0> button;
 
 // global var because interrupts can't have parameters or returning value. SO in order
 // for interrupts to access sth we need to use a glob var.
@@ -40,15 +38,6 @@ void __attribute__((used)) EXTI0HandlerImpl()
 		Scheduler::IRQfindNextThread();
     // We reset to 0 bcz of the while loop in the waitForButton
     waiting=0;
-}
-
-void configureButtonInterrupt()
-{
-    button::mode(Mode::INPUT_PULL_DOWN);
-    EXTI->IMR |= EXTI_IMR_MR0;
-    EXTI->RTSR |= EXTI_RTSR_TR0;
-    NVIC_EnableIRQ(EXTI0_IRQn);
-    NVIC_SetPriority(EXTI0_IRQn,15); //Low priority
 }
 
 // This pattern is used often. F.e. a scanf().

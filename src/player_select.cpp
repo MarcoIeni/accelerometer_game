@@ -1,5 +1,5 @@
 #include "player_select.h"
-#include "button.h"
+#include "button_sync.h"
 #include <miosix.h>
 #include <pthread.h>
 #include <unistd.h>
@@ -18,7 +18,6 @@ int chooseNumPlayers() {
 
   led1::high();
   led2::high();
-  configureButtonInterrupt();
 
   for (;;) {
     waitForButton();
@@ -34,7 +33,7 @@ int chooseNumPlayers() {
     }
     Thread::sleep(SLEEP_MS);
   }
-  return numPlayers; 
+  return numPlayers;
 }
 
 int player_select() {

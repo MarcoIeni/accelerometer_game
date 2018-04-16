@@ -2,7 +2,7 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-void configureButtonInterrupt();
+void button_interrupt_config();
 
 void waitForButton();
 
