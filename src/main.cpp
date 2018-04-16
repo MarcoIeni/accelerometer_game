@@ -1,3 +1,4 @@
+#include "player_select.h"
 #include <miosix.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -5,8 +6,7 @@
 
 using namespace miosix;
 
-int player_select();
-void play(int players);
+int play(int players);
 
 int main() {
   int players = player_select();
@@ -15,6 +15,4 @@ int main() {
   return 0;
 }
 
-int player_select() { return 0; }
-
-void play(int players) { return; }
+int play(int players) { return 0; }
