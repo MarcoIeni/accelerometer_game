@@ -29,6 +29,12 @@ void player_blink(int player, int times) {
   }
 }
 
+void players_off(int first, int last){
+  for (int i=first; i<=last;i++){
+    player_off(i);
+  }
+}
+
 void player_off(int player) {
   switch (player) {
   case 0:

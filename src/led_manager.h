@@ -16,5 +16,6 @@ void player_on(int player);
 void player_off(int player);
 void player_blink(int player, int times);
 void toggle_all();
+void players_off(int first, int last);
 
 #endif
