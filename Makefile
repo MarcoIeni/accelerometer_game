@@ -17,7 +17,7 @@ SUBDIRS := $(KPATH)
 ## List here your source files (both .s, .c and .cpp)
 ##
 SRC :=                                  \
-src/main.cpp src/button.cpp src/player_select.cpp src/timer_logic.cpp src/led_manager.cpp
+src/main.cpp src/button.cpp src/player_select.cpp src/timer_logic.cpp src/led_manager.cpp src/lis3dsh_usage.cpp src/lis3dsh_sync.cpp
 
 ##
 ## List here additional static libraries with relative path
@@ -34,7 +34,7 @@ INCLUDE_DIRS :=
 ##############################################################################
 
 ifeq ("$(VERBOSE)","1")
-Q := 
+Q :=
 ECHO := @true
 else
 Q := @

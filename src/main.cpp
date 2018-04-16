@@ -1,18 +1,30 @@
 #include "led_manager.h"
 #include "player_select.h"
 #include "timer_logic.h"
+#include "lis3dsh_sync.h"
+#include "lis3dsh_usage.h"
+#include "button.h"
 #include <miosix.h>
 #include <pthread.h>
 #include <stdio.h>
+
+#define SLEEP_SEC 300
 
 using namespace miosix;
 
 int play(int players);
 
 int main() {
+
   led_init();
-  // int players = player_select();
-  int players = 2;
+  spi_init();
+  LIS3DSH_init();
+  LIS3DSH_interrupt_config();
+  LIS3DSH_click_int_config();
+
+  configureButtonInterrupt();
+
+  int players = player_select();
   play(players);
 
   return 0;
@@ -46,7 +58,6 @@ int play(int players) {
 
     celebrate(win);
   }
-
 
   return 0;
 }

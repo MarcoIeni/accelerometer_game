@@ -1,4 +1,5 @@
 #include "timer_logic.h"
+#include "lis3dsh_sync.h"
 #include "button.h"
 #include <cstdio>
 #include <miosix.h>
@@ -8,12 +9,11 @@
 using namespace miosix;
 
 float getElapsedTime() {
-  configureButtonInterrupt();
   Timer timer0;
-  waitForButton();
+  waitForClick();
   timer0.start();
   Thread::sleep(SLEEP_MS);
-  waitForButton();
+  waitForClick();
   timer0.stop();
   Thread::sleep(SLEEP_MS);
   float time = timer0.interval();

@@ -18,13 +18,13 @@ static Thread *waiting=0;
 void __attribute__((naked)) EXTI0_IRQHandler()
 {
     // It's a macro w/ assembly instructions that save the registers in the TCB for the currently executing 3d.
-    // 
+    //
     saveContext();
     // branch and link to call the following function (remember the naming convention)
     asm volatile("bl _Z16EXTI0HandlerImplv");
     restoreContext();
 }
-    
+
 void __attribute__((used)) EXTI0HandlerImpl()
 {
     // Clear the pending flag.
@@ -51,7 +51,7 @@ void configureButtonInterrupt()
     NVIC_SetPriority(EXTI0_IRQn,15); //Low priority
 }
 
-// This pattern is used often. F.e. a scanf(). 
+// This pattern is used often. F.e. a scanf().
 void waitForButton()
 {
     // Disable interrupts. This is a miosix class that disable interrupts in the constructors
