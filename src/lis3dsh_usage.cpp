@@ -15,8 +15,6 @@ typedef Gpio<GPIOA_BASE, 5> spi_sck; // SPC
 typedef Gpio<GPIOA_BASE, 7> spi_si;
 /*!< SPI output on PA.6*/
 typedef Gpio<GPIOA_BASE, 6> spi_so;
-/*!< SoftwareSPI miosix class*/
-typedef SoftwareSPI<spi_si, spi_so, spi_sck, spi_ce, 5000> spi_c;
 
 /**
  *  \brief Sends 1 byte to the accelerometer through SPI and returns the value
@@ -29,7 +27,7 @@ unsigned char spi_send_recv(unsigned char byte) {
   while (!(SPI1->SR & 0b10)) // TXE
     printf("while TXE\n");
   SPI1->DR = byte;
-  while (!(SPI1->SR & 0b01)) // RXNE
+  while (!(SPI1->SR & 0b01))  // RXNE
     printf("while RXNE\n");
   return (SPI1->DR);
 }
@@ -42,64 +40,47 @@ unsigned char spi_send_recv(unsigned char byte) {
  *  \return void
  */
 void spi_send_data(unsigned char data, unsigned char address) {
-  GPIOE->ODR &= ~(1 << 3); // Reset bit 3
+  spi_ce::low();
   spi_send_recv(address);
-  printf("1st send completed");
   spi_send_recv(data);
-  printf("2nd send completed");
-  GPIOE->ODR |= (1 << 3); // set bit 3 high
+  spi_ce::high();
 }
 
 unsigned char spi_get_data(unsigned char address) {
   unsigned char c;
+  spi_ce::low();
   address = 0x80 | address;
-  GPIOE->ODR &= ~(1 << 3); // Reset bit 3
   spi_send_recv(address);
-  printf("1st get completed");
   c = spi_send_recv(0x00);
-  printf("2nd get completed");
-  GPIOE->ODR |= (1 << 3); // set bit 3 high
+  spi_ce::high();
   return c;
 }
 
 void spi_init() {
-  // spi_c::init();
+  // Enable spi clock to PE3, PA5, PA6 and PA7.
+  // Set PE3 mode to output
+  spi_ce::mode(Mode::OUTPUT);
+  spi_ce::high();
 
-  // enable clock to GPIOE
-  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN;
-  // configure PE3 as General purpose output mode
-  GPIOE->MODER |= 1 << (3 * 2);
-  // GPIO pin set to Pull Up
-  GPIOE->PUPDR |= 1 << (3 * 2);
+  // Set PA5, PA6, PA7 to alternate function mode.
+  spi_si::mode(Mode::ALTERNATE);
+  spi_si::alternateFunction(5);
+  spi_so::mode(Mode::ALTERNATE);
+  spi_so::alternateFunction(5);
+  spi_sck::mode(Mode::ALTERNATE);
+  spi_sck::alternateFunction(5);
 
-  // enable clock to GPIOA
-  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
 
-  // clock to SPI1
+  // Enable clock to SPI1
   RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-
-  // enable spi clock miso and mosi to PA5, PA6 and PA7
-  GPIOA->AFR[0] |= (5 << (5 * 4)) | (5 << (6 * 4)) |
-                   (5 << (7 * 4)); // 5 is the value of spi1 (see slide)
-
-  GPIOA->MODER &= ~(3 << (5 * 2)); // clear bits 10 & 11
-  GPIOA->MODER |= 2 << (5 * 2);    // MODER5[1:0] = 10 bin
-  GPIOA->MODER &= ~(3 << (6 * 2)); // clear bits 12 & 13
-  GPIOA->MODER |= 2 << (6 * 2);    // MODER6[1:0] = 10 bin
-  GPIOA->MODER &= ~(3 << (7 * 2)); // clear bits 14 & 15
-  GPIOA->MODER |= 2 << (7 * 2);    // MODER7[1:0] = 10 bin
-
   SPI1->CR1 = 0x0003;     // CPOL=1, CPHA=1
   SPI1->CR1 |= 1 << 2;    // Master Mode
-  SPI1->CR1 |= 1 << 6;    //	SPI enabled
-  SPI1->CR1 &= ~(7 << 3); // Use maximum frequency
+  SPI1->CR1 |= (1 << 5); // Use maximum frequency/32 (i.e. 10 Mhz/32)
   SPI1->CR1 |= 3 << 8;    // Soltware disables slave function
 
   SPI1->CR2 = 0x0000;
 
-  GPIOE->ODR |= (1 << 3); // set bit 3 high
-
-  spi_send_recv(0x0000);
+  SPI1->CR1 |= 1 << 6;    //	SPI enabled
 }
 
 /**
@@ -111,7 +92,6 @@ void spi_init() {
  *  \return return void
  */
 void LIS3DSH_init() {
-  // Initialize accelerometer SPI
   /*
     Addr: 0x20
     Output data rate = 0b0110= 100Hz
@@ -120,6 +100,7 @@ void LIS3DSH_init() {
     unction description
    */
   spi_send_data(0b01100111, LIS3DSH_CTRL_REG4_ADDR);
+  printf("Sent 4\n");
 
   /* Write value to MEMS CTRL_REG5 register
     All defaults:
@@ -128,6 +109,7 @@ void LIS3DSH_init() {
     +- 2g
   */
   spi_send_data(0b0, LIS3DSH_CTRL_REG5_ADDR);
+  printf("Sent 5\n");
 }
 
 /**
@@ -139,7 +121,6 @@ void LIS3DSH_interrupt_config() {
   /*
     Configure accelerometer INT2
   */
-  // spi_int2::init();
 
   EXTI->IMR |= EXTI_IMR_MR1; //
   // listen to raising edge trigger
@@ -156,12 +137,14 @@ void LIS3DSH_interrupt_config() {
      Interrupt2 disabled
   */
   spi_send_data(0b01001000, LIS3DSH_CTRL_REG3_ADDR);
+  printf("Sent 3\n");
 
   /* Configure State Machine 1 */
   /* Write value to MEMS CTRL_REG1 register
      SM1 Enable; SM1 interrupt routed (by default) to INT1; hysteris 0
   */
   spi_send_data(0b1001, LIS3DSH_CTRL_REG1_ADDR);
+  printf("Sent 1\n");
 }
 /**
  *  \brief Configure click interrupt
@@ -180,10 +163,12 @@ void LIS3DSH_click_int_config() {
   spi_send_data(0x01, LIS3DSH_TIM3_1_ADDR);
   spi_send_data(0x32, LIS3DSH_TIM2_1_L_ADDR);
   spi_send_data(0x07, LIS3DSH_TIM1_1_L_ADDR);
+  printf("Sent TIMx\n");
 
   // threshold values for sm1
   spi_send_data(0x55, LIS3DSH_THRS2_1_ADDR);
   spi_send_data(0x55, LIS3DSH_THRS1_1_ADDR);
+  printf("Sent Thr\n");
 
   // SM1 code registers
   // ST1_x are the different status of the state machine 1
@@ -239,4 +224,5 @@ void LIS3DSH_click_int_config() {
   // machine 1: listen to xyz axis
   spi_send_data(0b11111100, LIS3DSH_MASK1_A_ADDR);
   spi_send_data(0b10100001, LIS3DSH_SETT1_ADDR);
+  printf("Sent all state machine config\n");
 }

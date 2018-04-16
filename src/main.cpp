@@ -29,10 +29,9 @@ void delay() {
 }
 
 void test_who_am_i() {
-  printf("Test\n");
-  delay();
+  //delay();
   unsigned char c = spi_get_data(0x0F);
-  printf("%x\n", c);
+  printf("who_am_i: %x\n", c);
 }
 
 void play(int players) {
@@ -52,9 +51,10 @@ void play(int players) {
   LIS3DSH_interrupt_config();
 
   test_who_am_i();
-  //LIS3DSH_click_int_config();
+  LIS3DSH_click_int_config();
   for (;;) {
     waitForClick();
+    printf("Wait end\n");
     numClicks++;
     if (numClicks == 2)
       led2::high();
