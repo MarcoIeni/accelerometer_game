@@ -133,17 +133,17 @@ void LIS3DSH_interrupt_config() {
   /* Write value to MEMS CTRL_REG3 register (Address 0x23)
      Interrupt signal active high
      Interrupt signal latched
-     Interrupt1 enabled
-     Interrupt2 disabled
+     Interrupt1 disabled
+     Interrupt2 enabled
   */
-  spi_send_data(0b01001000, LIS3DSH_CTRL_REG3_ADDR);
+  spi_send_data(0b01010000, LIS3DSH_CTRL_REG3_ADDR);
   printf("Sent 3\n");
 
   /* Configure State Machine 1 */
   /* Write value to MEMS CTRL_REG1 register
      SM1 Enable; SM1 interrupt routed (by default) to INT1; hysteris 0
   */
-  spi_send_data(0b1001, LIS3DSH_CTRL_REG1_ADDR);
+  spi_send_data(0b00001001, LIS3DSH_CTRL_REG1_ADDR);
   printf("Sent 1\n");
 }
 /**
