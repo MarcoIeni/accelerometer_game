@@ -4,13 +4,53 @@ This document is the report of the Advanced Operating Systems project course of 
 It is a development project that involves programming an STM32F4 Discovery kit
 for STM32F407 in C/C++ by using \href{http://miosix.org/}{Miosix}, an OS kernel designed to run on 32bit microcontrollers.
 
-\textbf{Hello, I'm a citation! \cite{mathes1976designing}.}
-\lipsum[2]
+Git was used as version control system and you can check the GitHub project repository
+at \href{https://github.com/MarcoIeni/accelerometer_game}{this} link.
 \subsection{Problem statement}
-\textbf{Hello, I'm another citation! \cite{miller1979humanistic}}.
-\lipsum[1-2]
+The goal of the project is to design a game for 2 to 4 players, where each player should tap the accelerometer once and then again after 5 seconds. The player who gets closer to 5 seconds wins.
+
+Therefore, it is required to implement tap detection for the accelerometer and implement the game logic.
 \subsection{Summary of the work}
-\lipsum[2]
+The project was completed accomplishing all the tasks of the problem and we
+always worked together doing pair-programming.
+
+We used no external libraries except for Miosix obviously.
+
+We asked for the help of our advisor two times, because we had a few
+problems with the initialization of the SPI.
+% \begin{enumerate}
+%   \item the first time we made the mistake of using the software SPI provided by
+%     miosix while, in order to communicate with the accelerometer, the hardware
+%     SPI was necessary
+%   \item the second time we had a correct initialization of the hardware SPI,
+%     except for the frequency, that was too high with respect to the one
+%     supported by the accelerometer of the board.
+% \end{enumerate}
+
+We present here our git flow, because we think that it represents a good summary
+of our work.
+
+The main functionalities of our projects were divided into different branches:
+\begin{description}
+  \item [players\_select:] here we did the part of the program that is
+    responsible to choose the number of players that will play the game.
+  \item [play\_logic:] here we developed the game logic of the five seconds
+    challenge by using the user button instead of the accelerometer at first.
+  \item [accelerometer:] in this branch we tested the communication with the
+    accelerometer of the board, by reading the who\_am\_i register and the by
+    programming the state machine that decides when to send the interrupt for
+    the click detection.
+\end{description}
+
+These three branches were merged with the master one in this order. Then, we
+created another branch called \textbf{interrupts\_logic} to develop the handling of the two different interrupts
+of our system: the one that comes from the user button that manages the player
+selection, and the one that comes from the accelerometer that manages the tap
+detection for the 5 seconds challenge.
+
+Finally, this branch was merged with the master which, at this point, represents our final release.
+
+The work started on 27 Feb and ended on May.
 
 \pagebreak
 
@@ -19,7 +59,59 @@ for STM32F407 in C/C++ by using \href{http://miosix.org/}{Miosix}, an OS kernel 
 \prettyref{fig:polimi_logo} shows the logo of Politecnico di Milano.
 Please also make sure you provide each figure with an exhaustive caption.}
 
-\lipsum[1-12]
+\subsection{Game design}
+The design of the game is very simple, which is also due to the nature of the game itself.
+
+We associated the position of the four leds to the position of the players, that
+ideally should be seated all around the microcontroller.
+In this way when a led blinks or is on, you can understand to which player we
+are referring to.
+
+\subsubsection{Number of players selection}
+When the microcontroller is powered on, the game starts and two leds are on.
+The number of leds indicate the number of the players and the position in which
+they should be seated.
+At this point press the user button (the blue one) in order to select the right
+number of players.
+
+Finally, in order to start the 5 seconds challenge, you should confirm the number of players by tapping on the board.
+
+\subsubsection{Five seconds challenge}
+The first led is on, and the player which is seated in that position has to
+tap on the board the first time, wait for a time which is closer as much as
+possible to 5 seconds and then tap on the board again.
+
+The board at this point stores the difference in time between the two taps and
+switches on another led, which indicates the next player that has to play.
+
+When all the players participated, then the led that corresponds to the player
+which was closed to 5 seconds starts toggling and the five seconds challenge start
+the game.
+
+If you want to go back to the selection of the number of players you need to
+press the reset button (the black one).
+
+\subsection{Implementation}
+We assigned each main task of our system to a different component:
+
+\begin{description}
+  \item [lis3dsh\_manager:] it handles the initialization of the spi and the
+    accelerometer. It also defines the functions to communicate with the accelerometer through
+    the spi.
+  \item [play\_logic:] it allows to select the number of players and handles the logic of the game.
+  \item [led\_manager:] it handles the initialization of the leds and provides an
+    abstraction layer that allows to switch on and off the leds starting from
+    the player number.
+  \item [interrupt\_manager:] it is responsible for the management of the
+    interrupts, in particular the one that come from the press of the button and
+    the one that comes from the click of the accelerometer.
+\end{description}
+
+\subsubsection{Accelerometer configuration}
+In addition to the datasheet of the LIS3DSH, we used the application note
+document, which was very useful to determine the state machine to be used.
+
+
 
 \begin{figure}
 \centering\includegraphics[width=5cm]{polimi}
@@ -27,7 +119,41 @@ Please also make sure you provide each figure with an exhaustive caption.}
 \label{fig:polimi_logo}
 \end{figure}
 
+
 \section{Experimental evaluation}
+
+\hypertarget{installation}{%
+\subsection{Installation}\label{installation}}
+
+Miosix kernel is used as submodule as specified in
+\href{https://miosix.org/wiki/index.php?title=Miosix_and_git_workflow\#Setting_up_an_out_of_git_tree_project}{this}
+wiki page.
+In order to build the project, first clone the repository.
+
+\hypertarget{submodule-initialization}{%
+\subsubsection{Submodule
+Initialization}\label{submodule-initialization}}
+
+Initialize the submodule:
+
+\begin{verbatim}
+git submodule init
+\end{verbatim}
+
+If your git authentication method is https instead of ssh you need to
+open \texttt{.git/config} with your favourite text editor and inside
+\texttt{submodule\ "miosix-kernel"} change the url to
+\texttt{https://github.com/fedetft/miosix-kernel.git}
+
+\hypertarget{submodule-update}{%
+\subsubsection{Submodule Update}\label{submodule-update}}
+
+Update the submodule:
+
+\begin{verbatim}
+git submodule update --remote --rebase
+\end{verbatim}
+
 \lipsum[1]
 \subsection{Experimental setup}
 \lipsum[1-2]
