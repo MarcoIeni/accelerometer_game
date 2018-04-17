@@ -125,8 +125,8 @@ void LIS3DSH_interrupt_config() {
   // configure the interrupt controller in order to pass the interrupt request
   // up to the CPU
   NVIC_EnableIRQ(EXTI1_IRQn);
-  // Set the interrupt priority to 15 (low)
-  NVIC_SetPriority(EXTI1_IRQn, 15);
+  // Set the interrupt priority to 14 (low)
+  NVIC_SetPriority(EXTI1_IRQn, 14);
   /* Write value to MEMS CTRL_REG3 register (Address 0x23)
      Interrupt signal active high
      Interrupt signal latched
