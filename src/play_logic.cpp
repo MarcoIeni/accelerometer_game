@@ -44,6 +44,10 @@ int player_select() {
 
 int play(int players) {
   float *times = new float[players];
+  printf("Waiting for game to start\n");
+  wait_for_interrupt();
+  Thread::sleep(SLEEP_MS);
+
   for (;;) {
     for (int i = 0; i < players; ++i) {
       player_on(i);
