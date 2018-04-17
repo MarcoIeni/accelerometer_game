@@ -12,10 +12,10 @@ typedef Gpio<GPIOD_BASE, 15> led_b; // player 2
 
 void led_init();
 void switch_off_all();
-void player_on(int player);
-void player_off(int player);
-void player_blink(int player, int times);
+void player_on(unsigned player);
+void player_off(unsigned player);
+void player_blink(unsigned player, unsigned times);
 void toggle_all();
-void players_off(int first, int last);
+void players_off(unsigned first, unsigned last);
 
 #endif

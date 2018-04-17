@@ -19,10 +19,9 @@ int main() {
   LIS3DSH_interrupt_config();
   LIS3DSH_click_sm_config();
 
-
   button_interrupt_on();
   printf("Select number of players using button\n");
-  int players = player_select();
+  unsigned players = player_select();
   button_interrupt_off();
 
   printf("Play using tap\n");

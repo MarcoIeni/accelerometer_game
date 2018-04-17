@@ -20,8 +20,8 @@ void switch_off_all() {
   led_b::low();
 }
 
-void player_blink(int player, int times) {
-  for (int i = 0; i < times; ++i) {
+void player_blink(unsigned player, unsigned times) {
+  for (unsigned i = 0; i < times; ++i) {
     player_on(player);
     Thread::sleep(BLINK_INTERVAL);
     player_off(player);
@@ -29,13 +29,13 @@ void player_blink(int player, int times) {
   }
 }
 
-void players_off(int first, int last) {
-  for (int i = first; i <= last; i++) {
+void players_off(unsigned first, unsigned last) {
+  for (unsigned i = first; i <= last; i++) {
     player_off(i);
   }
 }
 
-void player_off(int player) {
+void player_off(unsigned player) {
   switch (player) {
   case 0:
     led_o::low();
@@ -52,7 +52,7 @@ void player_off(int player) {
   }
 }
 
-void player_on(int player) {
+void player_on(unsigned player) {
   switch (player) {
   case 0:
     led_o::high();
@@ -71,7 +71,7 @@ void player_on(int player) {
 
 void toggle_all() {
   switch_off_all();
-  for (unsigned int i = 7; i <= 15; ++i) {
+  for (unsigned i = 7; i <= 15; ++i) {
     led_o::high();
     Thread::sleep(TOGGLE_INTERVAL / i);
     led_o::low();

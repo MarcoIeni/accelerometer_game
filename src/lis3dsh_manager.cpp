@@ -5,10 +5,10 @@
 
 using namespace miosix;
 
-/*!< SPI clock enable on PE.3*/
-typedef Gpio<GPIOE_BASE, 3> spi_ce; // CS
+/*!< SPI clock enable (CE or CS) on PE.3*/
+typedef Gpio<GPIOE_BASE, 3> spi_ce;
 /*!< SPI clock on PA.5*/
-typedef Gpio<GPIOA_BASE, 5> spi_sck; // SPC
+typedef Gpio<GPIOA_BASE, 5> spi_sck;
 /*!< SPI input on PA.7*/
 typedef Gpio<GPIOA_BASE, 7> spi_si;
 /*!< SPI output on PA.6*/
@@ -22,11 +22,13 @@ typedef Gpio<GPIOA_BASE, 6> spi_so;
  *  \return void
  */
 unsigned char spi_send_recv(unsigned char byte) {
+  // Wait for TXE
   while (!(SPI1->SR & 0b10))
-    ; // TXE
+    ;
   SPI1->DR = byte;
+  // Wait for RXNE
   while (!(SPI1->SR & 0b01))
-    ; // RXNE
+    ;
   return (SPI1->DR);
 }
 
@@ -70,11 +72,13 @@ void spi_init() {
 
   // Enable clock to SPI1
   RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-  SPI1->CR1 = 0x0003;    // CPOL=1, CPHA=1
-  SPI1->CR1 |= 1 << 2;   // Master Mode
-  SPI1->CR1 |= (1 << 5); // Use maximum frequency/32 (i.e. 10 Mhz/32)
-  SPI1->CR1 |= 3 << 8;   // Soltware disables slave function
-  SPI1->CR1 |= 1 << 6;   //	SPI enabled
+  SPI1->CR1 = 1;           //  CPHA=1
+  SPI1->CR1 |= 1 << 1;     // CPOL=1,
+  SPI1->CR1 |= 1 << 2;     // Master Mode
+  SPI1->CR1 |= 0b001 << 5; // Baud Rate = maximum frequency/32 (i.e. 10 Mhz/32)
+  SPI1->CR1 |= 1 << 8;     // SSI enabled
+  SPI1->CR1 |= 1 << 9;     // SSM enabled
+  SPI1->CR1 |= 1 << 6;     //	SPI enabled
 }
 
 /**
@@ -112,6 +116,7 @@ void LIS3DSH_interrupt_config() {
   /*
     Configure accelerometer INT2
   */
+  // TODO: move to interrupt manager
 
   EXTI->IMR |= EXTI_IMR_MR1; //
   // listen to raising edge trigger

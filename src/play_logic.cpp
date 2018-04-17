@@ -14,11 +14,11 @@ bool click_flag = false;
 
 static float abs(float val) { return val >= 0 ? val : -val; }
 
-int player_select() {
-  int num_players = MIN_PLAYERS;
+unsigned player_select() {
+  unsigned num_players = MIN_PLAYERS;
 
   // initialize leds to minimum number of players
-  for (int i = 0; i < MIN_PLAYERS; i++) {
+  for (unsigned i = 0; i < MIN_PLAYERS; i++) {
     player_on(i);
   }
 
@@ -40,22 +40,22 @@ int player_select() {
   }
 }
 
-int play(int players) {
+int play(unsigned players) {
   float *times = new float[players];
   printf("Waiting for game to start\n");
   wait_for_interrupt();
   Thread::sleep(SLEEP_MS);
 
   for (;;) {
-    for (int i = 0; i < players; ++i) {
+    for (unsigned i = 0; i < players; ++i) {
       player_on(i);
       printf("Player %d, let's play\n", i + 1);
       times[i] = abs(get_elapsed_time() - 5);
       player_off(i);
     }
 
-    int win = 0;
-    for (int i = 1; i < players; ++i) {
+    unsigned win = 0;
+    for (unsigned i = 1; i < players; ++i) {
       if (times[i] < times[win])
         win = i;
     }
@@ -66,7 +66,7 @@ int play(int players) {
   return 0;
 }
 
-void celebrate(int player) {
+void celebrate(unsigned player) {
   printf("And the winner is %d\n", player + 1);
   switch_off_all();
   player_blink(player, 7);
