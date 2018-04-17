@@ -5,8 +5,6 @@
 #include <miosix.h>
 #include <stdio.h>
 
-#define SLEEP_SEC 300
-
 using namespace miosix;
 
 int main() {
@@ -20,8 +18,10 @@ int main() {
   LIS3DSH_click_sm_config();
 
   button_interrupts_enable();
+
   printf("Select number of players using button\n");
   unsigned players = player_select();
+
   button_interrupts_disable();
 
   printf("Play using tap\n");

@@ -27,13 +27,13 @@ void __attribute__((used)) EXTI0HandlerImpl() {
     return;
   // If there's a 3d waiting for this event, we wake up
   waiting->IRQwakeup();
-  // If this 3d has a higher priority than the priority of the current running
-  // thread, we force the scheduler to pick it. Otw it will be executed sooner
-  // or later.
+  // If this thread has a higher priority than the priority of the current
+  // running thread, we force the scheduler to pick it. Otw it will be executed
+  // sooner or later.
   if (waiting->IRQgetPriority() >
       Thread::IRQgetCurrentThread()->IRQgetPriority())
     Scheduler::IRQfindNextThread();
-  // We reset to 0 bcz of the while loop in the waitForButton
+  // We reset to 0 because of the while loop in the wait_for_button
   waiting = 0;
 }
 
@@ -73,19 +73,20 @@ void button_interrupts_disable() { NVIC_DisableIRQ(EXTI0_IRQn); }
 // This pattern is used often. F.e. a scanf().
 void wait_for_interrupt() {
   // Disable interrupts. This is a miosix class that disable interrupts in the
-  // constructors and reenable them in the destructor (so even in case of
+  // constructors and reenable them in the destructor (and so even in case of
   // exceptions)
   FastInterruptDisableLock dLock;
   // Returns a pointer to the current executing thread
   waiting = Thread::IRQgetCurrentThread();
   while (waiting) {
     // IRQxxx is a miosix naming convention saying that the function should be
-    // called w/ interrupts disabled 27'
+    // called with interrupts disabled
     Thread::IRQwait();
     // The interrupts is enabled in the event of the scope
     FastInterruptEnableLock eLock(dLock);
     // Tells the scheduler to force a context switch. If no 3ds are in execution
-    // it wakes up the idle 3d. This 3d is not executed until it's woken up.
+    // it wakes up the idle thread. This thread is not executed until it's woken
+    // up.
     Thread::yield();
   }
 }

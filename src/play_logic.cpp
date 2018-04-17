@@ -4,10 +4,6 @@
 #include <miosix.h>
 #include <stdio.h>
 
-#define SLEEP_MS 300
-#define MIN_PLAYERS 2
-#define MAX_PLAYERS 4
-
 using namespace miosix;
 
 bool click_flag = false;
@@ -54,15 +50,13 @@ int play(unsigned players) {
       player_off(i);
     }
 
-    unsigned win = 0;
+    unsigned winner = 0;
     for (unsigned i = 1; i < players; ++i) {
-      if (times[i] < times[win])
-        win = i;
+      if (times[i] < times[winner])
+        winner = i;
     }
-
-    celebrate(win);
+    celebrate(winner);
   }
-
   return 0;
 }
 

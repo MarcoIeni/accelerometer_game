@@ -5,7 +5,6 @@ void LIS3DSH_init();
 void LIS3DSH_interrupt_config();
 void LIS3DSH_click_sm_config();
 
-
 void spi_init();
 unsigned char spi_get_data(unsigned char address);
 void spi_send_data(unsigned char byte, unsigned char address);
