@@ -3,9 +3,7 @@
 #include "led_manager.h"
 #include "lis3dsh_usage.h"
 #include "play_logic.h"
-#include "timer_logic.h"
 #include <miosix.h>
-#include <pthread.h>
 #include <stdio.h>
 
 #define SLEEP_SEC 300
@@ -21,10 +19,13 @@ int main() {
   LIS3DSH_interrupt_config();
   LIS3DSH_click_sm_config();
 
+
   button_interrupt_on();
+  printf("Select number of players using button\n");
   int players = player_select();
   button_interrupt_off();
 
+  printf("Play using tap\n");
   play(players);
 
   return 0;

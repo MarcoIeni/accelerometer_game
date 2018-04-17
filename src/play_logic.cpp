@@ -15,7 +15,7 @@ bool click_flag = false;
 static float abs(float val) { return val >= 0 ? val : -val; }
 
 int player_select() {
-  int numPlayers = MIN_PLAYERS;
+  int num_players = MIN_PLAYERS;
 
   // initialize leds to minimum number of players
   for (int i = 0; i < MIN_PLAYERS; i++) {
@@ -24,18 +24,16 @@ int player_select() {
 
   while (1) {
     wait_for_interrupt();
-    printf("Main1: %d\n", click_flag);
     if (click_flag) {
-      printf("Main2: %d\n", click_flag);
       switch_off_all();
-      return numPlayers;
+      printf("%d players selected\n", num_players);
+      return num_players;
     }
-    printf("Main3: %d\n", click_flag);
-    if (numPlayers < MAX_PLAYERS) {
-      player_on(numPlayers);
-      numPlayers++;
+    if (num_players < MAX_PLAYERS) {
+      player_on(num_players);
+      num_players++;
     } else {
-      numPlayers = MIN_PLAYERS;
+      num_players = MIN_PLAYERS;
       players_off(MIN_PLAYERS, MAX_PLAYERS - 1);
     }
     Thread::sleep(SLEEP_MS);
@@ -53,7 +51,6 @@ int play(int players) {
       player_on(i);
       printf("Player %d, let's play\n", i + 1);
       times[i] = abs(get_elapsed_time() - 5);
-      printf("%f\n", times[i]);
       player_off(i);
     }
 
@@ -72,7 +69,7 @@ int play(int players) {
 void celebrate(int player) {
   printf("And the winner is %d\n", player + 1);
   switch_off_all();
-  player_blink(player, 10);
+  player_blink(player, 7);
   toggle_all();
 }
 
