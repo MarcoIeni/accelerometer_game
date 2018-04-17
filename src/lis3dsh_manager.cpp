@@ -1,14 +1,14 @@
-#include "lis3dsh_usage.h"
+#include "lis3dsh_manager.h"
 #include "lis3dsh_addresses.h"
 #include <miosix.h>
 #include <stdio.h>
 
 using namespace miosix;
 
-/*!< SPI clock enable on PE.3*/
-typedef Gpio<GPIOE_BASE, 3> spi_ce; // CS
+/*!< SPI clock enable (CE or CS) on PE.3*/
+typedef Gpio<GPIOE_BASE, 3> spi_ce;
 /*!< SPI clock on PA.5*/
-typedef Gpio<GPIOA_BASE, 5> spi_sck; // SPC
+typedef Gpio<GPIOA_BASE, 5> spi_sck;
 /*!< SPI input on PA.7*/
 typedef Gpio<GPIOA_BASE, 7> spi_si;
 /*!< SPI output on PA.6*/
@@ -22,11 +22,13 @@ typedef Gpio<GPIOA_BASE, 6> spi_so;
  *  \return void
  */
 unsigned char spi_send_recv(unsigned char byte) {
-  while (!(SPI1->SR & 0b10)) // TXE
-    printf("while TXE\n");
+  // Wait for TXE
+  while (!(SPI1->SR & 0b10))
+    ;
   SPI1->DR = byte;
-  while (!(SPI1->SR & 0b01))  // RXNE
-    printf("while RXNE\n");
+  // Wait for RXNE
+  while (!(SPI1->SR & 0b01))
+    ;
   return (SPI1->DR);
 }
 
@@ -68,17 +70,15 @@ void spi_init() {
   spi_sck::mode(Mode::ALTERNATE);
   spi_sck::alternateFunction(5);
 
-
   // Enable clock to SPI1
   RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-  SPI1->CR1 = 0x0003;     // CPOL=1, CPHA=1
-  SPI1->CR1 |= 1 << 2;    // Master Mode
-  SPI1->CR1 |= (1 << 5); // Use maximum frequency/32 (i.e. 10 Mhz/32)
-  SPI1->CR1 |= 3 << 8;    // Soltware disables slave function
-
-  SPI1->CR2 = 0x0000;
-
-  SPI1->CR1 |= 1 << 6;    //	SPI enabled
+  SPI1->CR1 = 1;           //  CPHA=1
+  SPI1->CR1 |= 1 << 1;     // CPOL=1,
+  SPI1->CR1 |= 1 << 2;     // Master Mode
+  SPI1->CR1 |= 0b001 << 5; // Baud Rate = maximum frequency/32 (i.e. 10 Mhz/32)
+  SPI1->CR1 |= 1 << 8;     // SSI enabled
+  SPI1->CR1 |= 1 << 9;     // SSM enabled
+  SPI1->CR1 |= 1 << 6;     //	SPI enabled
 }
 
 /**
@@ -97,7 +97,6 @@ void LIS3DSH_init() {
     Enable zen, yen, xen (z, y, x axes)
    */
   spi_send_data(0b01100111, LIS3DSH_CTRL_REG4_ADDR);
-  printf("Sent 4\n");
 
   /* Write value to MEMS CTRL_REG5 register
     All defaults:
@@ -106,7 +105,6 @@ void LIS3DSH_init() {
     +- 2g
   */
   spi_send_data(0b0, LIS3DSH_CTRL_REG5_ADDR);
-  printf("Sent 5\n");
 }
 
 /**
@@ -118,15 +116,6 @@ void LIS3DSH_interrupt_config() {
   /*
     Configure accelerometer INT2
   */
-
-  EXTI->IMR |= EXTI_IMR_MR1; //
-  // listen to raising edge trigger
-  EXTI->RTSR |= EXTI_RTSR_TR1;
-  // configure the interrupt controller in order to pass the interrupt request
-  // up to the CPU
-  NVIC_EnableIRQ(EXTI1_IRQn);
-  // Set the interrupt priority to 15 (low)
-  NVIC_SetPriority(EXTI1_IRQn, 15);
   /* Write value to MEMS CTRL_REG3 register (Address 0x23)
      Interrupt signal active high
      Interrupt signal latched
@@ -134,14 +123,12 @@ void LIS3DSH_interrupt_config() {
      Interrupt2 enabled
   */
   spi_send_data(0b01010000, LIS3DSH_CTRL_REG3_ADDR);
-  printf("Sent 3\n");
 
   /* Configure State Machine 1 */
   /* Write value to MEMS CTRL_REG1 register
      SM1 Enable; SM1 interrupt routed (by default) to INT1; hysteris 0
   */
   spi_send_data(0b00001001, LIS3DSH_CTRL_REG1_ADDR);
-  printf("Sent 1\n");
 }
 /**
  *  \brief Configure click interrupt
@@ -160,7 +147,6 @@ void LIS3DSH_click_sm_config() {
   spi_send_data(0x01, LIS3DSH_TIM3_1_ADDR);
   spi_send_data(0x32, LIS3DSH_TIM2_1_L_ADDR);
   spi_send_data(0x07, LIS3DSH_TIM1_1_L_ADDR);
-  printf("Sent TIMx\n");
 
   // threshold values for sm1
   spi_send_data(0x55, LIS3DSH_THRS2_1_ADDR);
@@ -192,34 +178,9 @@ void LIS3DSH_click_sm_config() {
   /* 0b 0000 0100
      NOP - TI4
    */
-  spi_send_data(0x04, LIS3DSH_ST1_5_ADDR);
-  /* 0b 1001 0001
-     GTTH1 - TI1
-   */
-  spi_send_data(0x91, LIS3DSH_ST1_6_ADDR);
-  /* 0b 0010 0110
-     TI2 - GNTH2
-   */
-  spi_send_data(0x26, LIS3DSH_ST1_7_ADDR);
-  /* 0b 0011 1000
-     TI3 - LNTH2
-   */
-  spi_send_data(0x38, LIS3DSH_ST1_8_ADDR);
-  /* 0b 0000 0100
-     NOP - TI4
-   */
-  spi_send_data(0x04, LIS3DSH_ST1_9_ADDR);
-  /* 0b 1001 0001
-     GTTH1 - TI1
-   */
-  spi_send_data(0x91, LIS3DSH_ST1_10_ADDR);
-  /*
-    0b 0001 0001
-    TI1 - TI1
-  */
-  spi_send_data(0x11, LIS3DSH_ST1_11_ADDR);
+  spi_send_data(0x11, LIS3DSH_ST1_5_ADDR);
+
   // machine 1: listen to xyz axis
   spi_send_data(0b11111100, LIS3DSH_MASK1_A_ADDR);
   spi_send_data(0b10100001, LIS3DSH_SETT1_ADDR);
-  printf("Sent all state machine config\n");
 }
