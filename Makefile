@@ -17,7 +17,7 @@ SUBDIRS := $(KPATH)
 ## List here your source files (both .s, .c and .cpp)
 ##
 SRC :=                                  \
-src/main.cpp src/button_usage.cpp src/play_logic.cpp  src/led_manager.cpp src/lis3dsh_usage.cpp src/interrupt_manager.cpp
+src/main.cpp src/button_manager.cpp src/play_logic.cpp  src/led_manager.cpp src/lis3dsh_manager.cpp src/interrupt_manager.cpp
 
 ##
 ## List here additional static libraries with relative path
