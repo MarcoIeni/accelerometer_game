@@ -178,32 +178,8 @@ void LIS3DSH_click_sm_config() {
   /* 0b 0000 0100
      NOP - TI4
    */
-  spi_send_data(0x04, LIS3DSH_ST1_5_ADDR);
-  /* 0b 1001 0001
-     GTTH1 - TI1
-   */
-  spi_send_data(0x91, LIS3DSH_ST1_6_ADDR);
-  /* 0b 0010 0110
-     TI2 - GNTH2
-   */
-  spi_send_data(0x26, LIS3DSH_ST1_7_ADDR);
-  /* 0b 0011 1000
-     TI3 - LNTH2
-   */
-  spi_send_data(0x38, LIS3DSH_ST1_8_ADDR);
-  /* 0b 0000 0100
-     NOP - TI4
-   */
-  spi_send_data(0x04, LIS3DSH_ST1_9_ADDR);
-  /* 0b 1001 0001
-     GTTH1 - TI1
-   */
-  spi_send_data(0x91, LIS3DSH_ST1_10_ADDR);
-  /*
-    0b 0001 0001
-    TI1 - TI1
-  */
-  spi_send_data(0x11, LIS3DSH_ST1_11_ADDR);
+  spi_send_data(0x11, LIS3DSH_ST1_5_ADDR);
+
   // machine 1: listen to xyz axis
   spi_send_data(0b11111100, LIS3DSH_MASK1_A_ADDR);
   spi_send_data(0b10100001, LIS3DSH_SETT1_ADDR);
