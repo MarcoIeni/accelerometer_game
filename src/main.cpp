@@ -1,9 +1,9 @@
+#include "button_sync.h"
+#include "interrupt_manager.h"
 #include "led_manager.h"
+#include "lis3dsh_usage.h"
 #include "player_select.h"
 #include "timer_logic.h"
-#include "lis3dsh_sync.h"
-#include "lis3dsh_usage.h"
-#include "button_sync.h"
 #include <miosix.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -17,6 +17,7 @@ int play(int players);
 int main() {
 
   led_init();
+
   spi_init();
   LIS3DSH_init();
   LIS3DSH_interrupt_config();

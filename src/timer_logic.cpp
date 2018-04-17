@@ -1,5 +1,5 @@
 #include "timer_logic.h"
-#include "lis3dsh_sync.h"
+#include "interrupt_manager.h"
 #include <cstdio>
 #include <miosix.h>
 
@@ -9,11 +9,13 @@ using namespace miosix;
 
 float getElapsedTime() {
   Timer timer0;
-  waitForClick();
+  wait_for_interrupt();
+  printf("Timer starting\n");
   timer0.start();
   Thread::sleep(SLEEP_MS);
-  waitForClick();
+  wait_for_interrupt();
   timer0.stop();
+  printf("Timer stopped\n");
   Thread::sleep(SLEEP_MS);
   float time = timer0.interval();
   time /= TICK_FREQ;
