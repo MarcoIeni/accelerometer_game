@@ -72,7 +72,7 @@ void player_on(int player) {
 
 void toggle_all() {
   switch_off_all();
-  for (int i = 1; i <= 25; ++i) {
+  for (int i = 1; i <= 20; ++i) {
     led_o::high();
     Thread::sleep(TOGGLE_INTERVAL/i);
     led_o::low();
