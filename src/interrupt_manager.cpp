@@ -50,6 +50,26 @@ void __attribute__((used)) EXTI1HandlerImpl() {
   waiting = 0;
 }
 
+void accelerometer_interrupts_enable() {
+  EXTI->IMR |= EXTI_IMR_MR1; //
+  // listen to raising edge trigger
+  EXTI->RTSR |= EXTI_RTSR_TR1;
+  // configure the interrupt controller in order to pass the interrupt request
+  // up to the CPU
+  NVIC_EnableIRQ(EXTI1_IRQn);
+  // Set the interrupt priority to 14 (low)
+  NVIC_SetPriority(EXTI1_IRQn, 14);
+}
+
+void button_interrupts_enable() {
+  EXTI->IMR |= EXTI_IMR_MR0;
+  EXTI->RTSR |= EXTI_RTSR_TR0;
+  NVIC_EnableIRQ(EXTI0_IRQn);
+  NVIC_SetPriority(EXTI0_IRQn, 15);
+}
+
+void button_interrupts_disable() { NVIC_DisableIRQ(EXTI0_IRQn); }
+
 // This pattern is used often. F.e. a scanf().
 void wait_for_interrupt() {
   // Disable interrupts. This is a miosix class that disable interrupts in the

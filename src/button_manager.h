@@ -6,7 +6,6 @@ using namespace miosix;
 
 typedef Gpio<GPIOA_BASE, 0> button;
 
-void button_interrupt_on();
-void button_interrupt_off();
+void button_init();
 
 #endif

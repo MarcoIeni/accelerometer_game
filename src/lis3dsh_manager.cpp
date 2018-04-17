@@ -116,16 +116,6 @@ void LIS3DSH_interrupt_config() {
   /*
     Configure accelerometer INT2
   */
-  // TODO: move to interrupt manager
-
-  EXTI->IMR |= EXTI_IMR_MR1; //
-  // listen to raising edge trigger
-  EXTI->RTSR |= EXTI_RTSR_TR1;
-  // configure the interrupt controller in order to pass the interrupt request
-  // up to the CPU
-  NVIC_EnableIRQ(EXTI1_IRQn);
-  // Set the interrupt priority to 14 (low)
-  NVIC_SetPriority(EXTI1_IRQn, 14);
   /* Write value to MEMS CTRL_REG3 register (Address 0x23)
      Interrupt signal active high
      Interrupt signal latched
