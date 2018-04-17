@@ -1,7 +1,7 @@
-#include "button_usage.h"
+#include "button_manager.h"
 #include "interrupt_manager.h"
 #include "led_manager.h"
-#include "lis3dsh_usage.h"
+#include "lis3dsh_manager.h"
 #include "play_logic.h"
 #include <miosix.h>
 #include <stdio.h>

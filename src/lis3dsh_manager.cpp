@@ -1,4 +1,4 @@
-#include "lis3dsh_usage.h"
+#include "lis3dsh_manager.h"
 #include "lis3dsh_addresses.h"
 #include <miosix.h>
 #include <stdio.h>
@@ -74,7 +74,7 @@ void spi_init() {
   SPI1->CR1 |= 1 << 2;   // Master Mode
   SPI1->CR1 |= (1 << 5); // Use maximum frequency/32 (i.e. 10 Mhz/32)
   SPI1->CR1 |= 3 << 8;   // Soltware disables slave function
-  SPI1->CR1 |= 1 << 6; //	SPI enabled
+  SPI1->CR1 |= 1 << 6;   //	SPI enabled
 }
 
 /**

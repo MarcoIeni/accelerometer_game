@@ -1,6 +1,5 @@
-#ifndef _LIS3DSH_USAGE_H
-#define _LIS3DSH_USAGE_H
-
+#ifndef _LIS3DSH_MANAGER_H
+#define _LIS3DSH_MANAGER_H
 // init values CTRL_REG4 and CTRL_REG5
 #define LIS3DSH_DATARATE_100 ((unsigned char)0x60) /* 100   Hz Normal Mode */
 #define LIS3DSH_XYZ_ENABLE ((unsigned char)0x07)   /* zen=1, yen=1, xen=1 */
