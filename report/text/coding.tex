@@ -54,12 +54,7 @@ The work started on 27 Feb and ended on May.
 
 \pagebreak
 
-\section{Design and implementation}
-\textbf{Please make sure you explicitely cite the figures.
-\prettyref{fig:polimi_logo} shows the logo of Politecnico di Milano.
-Please also make sure you provide each figure with an exhaustive caption.}
-
-\subsection{Game design}
+\section{The Game}
 The design of the game is very simple, which is also due to the nature of the game itself.
 
 We associated the position of the four leds to the position of the players, that
@@ -67,7 +62,7 @@ ideally should be seated all around the microcontroller.
 In this way when a led blinks or is on, you can understand to which player we
 are referring to.
 
-\subsubsection{Number of players selection}
+\subsection{Number of players selection}
 When the microcontroller is powered on, the game starts and two leds are on.
 The number of leds indicate the number of the players and the position in which
 they should be seated.
@@ -76,7 +71,7 @@ number of players.
 
 Finally, in order to start the 5 seconds challenge, you should confirm the number of players by tapping on the board.
 
-\subsubsection{Five seconds challenge}
+\subsection{Five seconds challenge}
 The first led is on, and the player which is seated in that position has to
 tap on the board the first time, wait for a time which is closer as much as
 possible to 5 seconds and then tap on the board again.
@@ -90,37 +85,6 @@ the game.
 
 If you want to go back to the selection of the number of players you need to
 press the reset button (the black one).
-
-\subsection{Implementation}
-We assigned each main task of our system to a different component:
-
-\begin{description}
-  \item [lis3dsh\_manager:] it handles the initialization of the spi and the
-    accelerometer. It also defines the functions to communicate with the accelerometer through
-    the spi.
-  \item [play\_logic:] it allows to select the number of players and handles the logic of the game.
-  \item [led\_manager:] it handles the initialization of the leds and provides an
-    abstraction layer that allows to switch on and off the leds starting from
-    the player number.
-  \item [interrupt\_manager:] it is responsible for the management of the
-    interrupts, in particular the one that come from the press of the button and
-    the one that comes from the click of the accelerometer.
-\end{description}
-
-\subsubsection{Accelerometer configuration}
-In addition to the datasheet of the LIS3DSH, we used the application note
-document, which was very useful to determine the state machine to be used.
-
-
-
-\begin{figure}
-\centering\includegraphics[width=5cm]{polimi}
-\caption{POLIMI logo, which is used by this document as a placeholder.}
-\label{fig:polimi_logo}
-\end{figure}
-
-
-\section{Experimental evaluation}
 
 \hypertarget{installation}{%
 \subsection{Installation}\label{installation}}
@@ -154,64 +118,36 @@ Update the submodule:
 git submodule update --remote --rebase
 \end{verbatim}
 
-\lipsum[1]
-\subsection{Experimental setup}
-\lipsum[1-2]
-\subsection{Results}
-\textbf{Please make sure you explicitely cite the tables.
-\prettyref{tab:a_complex_table} shows a complex table.
-Please also make sure you provide each table with an exhaustive caption.
-Captions for tables must be placed before not after the tables.}
-\lipsum[1-4]
+\section{Design and implementation}
+\subsection{Main modules}
+We assigned each main task of our system to a different component:
 
+\begin{description}
+  \item [lis3dsh\_manager:] it handles the initialization of the spi and the
+    accelerometer. It also defines the functions to communicate with the accelerometer through
+    the spi.
+  \item [play\_logic:] it allows to select the number of players and handles the logic of the game.
+  \item [led\_manager:] it handles the initialization of the leds and provides an
+    abstraction layer that allows to switch on and off the leds starting from
+    the player number.
+  \item [interrupt\_manager:] it is responsible for the management of the
+    interrupts, in particular the one that come from the press of the button and
+    the one that comes from the click of the accelerometer.
+\end{description}
 
-\begin{table}
-\small
-\begin{center}
+\subsection{Accelerometer configuration}
+In addition to the datasheet of the LIS3DSH, we used the application note
+document \cite{note} which was very useful to determine the state machine to be used.
 
-\caption{Summary of the test scenarios.
-$M_1\xrightarrow{\alpha}M_2$ means that an application mapping
-is changed from $M_1$ to $M_2$ after application $\alpha$
-has terminated.}
-\begin{tabular}{l|lcc|L{2cm}l}
-\cline{2-6}
-& \multicolumn{3}{c|}{Description of the workload} & \multicolumn{2}{c}{Cores allocation}\\
-\cline{2-6}
-Name of scenario & Application & Threads & $\frac{Threads}{Cores}$ & HMP & HMP w/policy \\
-\hline
+In this document, in fact, it was present a state machine already configured for
+double-tap detection.
+Therefore we adjusted it in order to implement the single-tap detection.
 
-\multirow{2}{*}{LITTLE 1} & ferret$\dagger$ & 1 & \multirow{2}{*}{1.00} & $0-3$ & $0$ \\
- & vips & 3 & & $0-3$ & $1-3 \xrightarrow{\dagger} 0-3$ \\
-\hline
-\multirow{2}{*}{LITTLE 2} & freqmine$\dagger$ & 2 & \multirow{2}{*}{1.25} & $0-3$ & $0-1$ \\
- & blackscholes & 3 &   & $0-3$ & $0-3 \xrightarrow{\dagger} 0-3$ \\
-\hline
-\multirow{2}{*}{LITTLE 3} & bodytrack$\dagger$ & 3 & \multirow{2}{*}{1.25} & $0-3$ & $0-1$ \\
- & facesim & 2 &  & $0-3$ & $0-3$ \\
-\hline
-\multirow{2}{*}{LITTLE 4} & facesim & 3 & \multirow{2}{*}{1.50} & $0-3$ & $0-1\xrightarrow{\dagger}0-3$ \\
- & blackscholes$\dagger$ & 3 &  & $0-3$ & $2-3$ \\
-\hline
-\hline
-
-
-\multirow{2}{*}{big 1} & vips & 3 & \multirow{2}{*}{1.00} & $4-7$ & $4-5 \xrightarrow{\dagger} 4-7$ \\
- & ferret$\dagger$ & 1 & & $4-7$ & $6-7$ \\
-\hline
-\multirow{2}{*}{big 2} & freqmine$\dagger$ & 2 & \multirow{2}{*}{1.25} & $4-7$ & $4-5$ \\
- & blackscholes & 3 &   & $4-7$ & $6-7 \xrightarrow{\dagger} 4-7$ \\
-\hline
-\multirow{2}{*}{big 3} & facesim & 2 & \multirow{2}{*}{1.25} & $4-7$ & $4-5$ \\
- & bodytrack & 3 &  & $4-7$ & $4-7$ \\
-\hline
-\multirow{2}{*}{big 4} & facesim & 3 & \multirow{2}{*}{1.50} & $4-7$ & $4-5\xrightarrow{\dagger}4-7$ \\
- & blackscholes$\dagger$ & 3 &  & $4-7$ & $4-7$ \\
-\hline
-
-\end{tabular}
-  \label{tab:a_complex_table}
-\end{center}
-\end{table}
+After an analysis of the already made state machine, we cut off the states that
+went from the recognition of the second tap till the end.
 
 \section{Conclusions and Future Works}
-\lipsum[1]
+We adjusted the parameters of the accelerometer configuration based only
+on our experience with the bare board.
+In the future, it would be interesting to test this configuration on a board
+inside a package and to calibrate the parameters also for this scenario.
