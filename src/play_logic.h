@@ -1,3 +1,7 @@
+/**
+ *   \file play_logic.h
+ *   \brief The logic of the game.
+ */
 #ifndef _PLAY_LOGIC_H
 #define _PLAY_LOGIC_H
 

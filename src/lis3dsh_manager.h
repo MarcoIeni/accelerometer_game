@@ -1,3 +1,11 @@
+/**
+ *   \file lis3dsh_manager.h
+ *   \brief Manager of the LIS3DSH peripheral.
+ *    It's used to initialise and configure both the accelerometer and the SPI,
+ * as well as implementing functions to allow the communication with the
+ * accelerometer.
+ *
+ */
 #ifndef _LIS3DSH_MANAGER_H
 #define _LIS3DSH_MANAGER_H
 
