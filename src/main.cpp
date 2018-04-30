@@ -25,6 +25,12 @@ int main() {
   button_interrupts_disable();
 
   printf("Play using tap\n");
+  /*
+   * The following function enters in an infinite loop that let the players play
+   * how many matches they want.
+   * If you need to change the number of players you have to restart the program
+   * (for example by pressing the reset button).
+   */
   play(players);
 
   return 0;
