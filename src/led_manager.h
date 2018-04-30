@@ -1,3 +1,11 @@
+/**
+ *   \file led_manager.h
+ *   \brief Functions to manages leds.
+ *   In our project, leds and players are strictly related. So, this file
+ * manages both leds and players.
+ *
+ */
+
 #ifndef _LED_MANAGER_H
 #define _LED_MANAGER_H
 

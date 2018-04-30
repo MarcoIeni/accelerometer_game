@@ -1,3 +1,9 @@
+/**
+ *   \file interrupt_manager.h
+ *   \brief Functions to manage interrupts.
+ *   At the moment, it explicitly manages the interrupts coming from the button and the accelerometer.
+ *
+ */
 #ifndef _INTERRUPT_MANAGER_H
 #define _INTERRUPT_MANAGER_H
 

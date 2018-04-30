@@ -75,7 +75,7 @@ GRTAGS
 .#*
 
 ### DOXYGEN
-docs/
+doxygen/
 
 ### PERSONAL SCRIPTS
 script*.sh
