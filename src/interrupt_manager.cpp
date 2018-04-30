@@ -2,13 +2,6 @@
 #include <kernel/scheduler/scheduler.h>
 #include <miosix.h>
 
-/*
- * accelerometer and button priority are both low, but the accelerometer one is
- * higher then the button one.
- */
-#define ACCELEROMETER_PRIORITY 14
-#define BUTTON_PRIORITY 15
-
 using namespace miosix;
 
 static Thread *waiting = 0;
