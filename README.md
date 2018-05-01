@@ -1,12 +1,14 @@
 # Advanced Operating Systems project: Accelerometer Game
 Project repository for the Advanced Operating Systems course of M.Sc. Computer Science and Engineering at Politecnico di Milano.
 
+You can find the code documentation at [this](https://marcoieni.github.io/accelerometer_game) link.
+
 ## Assignment
 ### Description
 Design a game for 2 to 4 players, where each player should tap the accelerometer once and then again after 5 seconds.
 The player who gets closer to 5 seconds wins.
 
-The project is built on top of [Miosix RTOS](http://miosix.org/). 
+The project is built on top of [Miosix RTOS](http://miosix.org/).
 
 ### Goal
 The project requires to implement tap detection for
