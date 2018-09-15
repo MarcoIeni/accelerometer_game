@@ -8,7 +8,7 @@ You can find the code documentation at [this](https://marcoieni.github.io/accele
 Design a game for 2 to 4 players, where each player should tap the accelerometer once and then again after 5 seconds.
 The player who gets closer to 5 seconds wins.
 
-The project is built on top of [Miosix RTOS](http://miosix.org/).
+The project is built for the [STM32F4-DISCOVERY board](https://www.st.com/en/evaluation-tools/stm32f4discovery.html) on top of [Miosix RTOS](http://miosix.org/).
 
 ### Goal
 The project requires to implement tap detection for
